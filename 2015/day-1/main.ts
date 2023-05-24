@@ -1,6 +1,6 @@
 import input from './input.json';
 
-export function day1(input: string): number {
+export function day1Part1(input: string): number {
   const upOneFloor = '(';
   const downOneFloor = ')';
   let floor = 0;
@@ -18,5 +18,7 @@ export function day1(input: string): number {
   return floor;
 }
 
-const day1Answer = day1(input);
-console.log('Day 1, Answer:', day1Answer);
+export function day1Part2(input: string): any {}
+
+const day1Answer = day1Part1(input);
+console.log('Day 1 -> Part 1 -> Answer:', day1Answer);
