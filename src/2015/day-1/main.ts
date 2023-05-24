@@ -18,7 +18,7 @@ export function day1Part1(input: string): number {
   return floor;
 }
 
-export function day1Part2(input: string): number {
+export function day1Part2(input: string): number | undefined {
   const basementFloor = -1;
 
   for (let position = 1; position <= input.length; position++) {
@@ -29,8 +29,6 @@ export function day1Part2(input: string): number {
       return position;
     }
   }
-
-  return 0;
 }
 
 const day1Part1Answer = day1Part1(input);

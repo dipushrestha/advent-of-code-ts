@@ -6,6 +6,7 @@ describe('Day 1: Not Quite Lisp', () => {
     expect(day1Part1('(())')).toBe(0);
     expect(day1Part1('()()')).toBe(0);
   });
+
   test('((( and (()(()( both result in floor 3', () => {
     expect(day1Part1('(((')).toBe(3);
     expect(day1Part1('(()(()(')).toBe(3);
