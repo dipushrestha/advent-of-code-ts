@@ -1,6 +1,6 @@
 import type { JestConfigWithTsJest } from 'ts-jest';
 
-const jestConfigWithTsJest: JestConfigWithTsJest = {
+export default {
   preset: 'ts-jest',
   testEnvironment: 'node',
   collectCoverage: true,
@@ -13,6 +13,4 @@ const jestConfigWithTsJest: JestConfigWithTsJest = {
       statements: 80
     }
   }
-};
-
-module.exports = jestConfigWithTsJest;
+} satisfies JestConfigWithTsJest;
