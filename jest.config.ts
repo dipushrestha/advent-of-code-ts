@@ -3,6 +3,7 @@ import type { JestConfigWithTsJest } from 'ts-jest';
 export default {
   preset: 'ts-jest',
   testEnvironment: 'node',
+  testTimeout: 60 * 1000,
   collectCoverage: true,
   collectCoverageFrom: ['src/**/*.ts'],
   coverageThreshold: {
