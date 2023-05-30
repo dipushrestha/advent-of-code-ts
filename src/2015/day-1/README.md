@@ -32,3 +32,7 @@ For example:
 - `()())` causes him to enter the basement at character position `5`.
 
 What is the **position** of the character that causes Santa to first enter the basement?
+
+---
+
+From: [Day 1 - Advent of Code 2015](https://adventofcode.com/2015/day/1)

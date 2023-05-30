@@ -12,3 +12,7 @@ For example:
 ### --- Part Two ---
 
 Now find one that starts with six zeroes.
+
+---
+
+From: [Day 4 - Advent of Code 2015](https://adventofcode.com/2015/day/4)
