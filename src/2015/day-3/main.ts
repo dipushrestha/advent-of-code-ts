@@ -38,12 +38,9 @@ export function getNumberOfHousesReceivingPresentFromSanta(
     moveLocation(santaLocation, direction as Direction);
 
     const currentHouseKey = JSON.stringify(santaLocation);
-    const currentHouseDeliveryCount = housesTraversed.get(currentHouseKey);
+    const currentHousePresentCount = housesTraversed.get(currentHouseKey);
 
-    housesTraversed.set(
-      currentHouseKey,
-      currentHouseDeliveryCount ? currentHouseDeliveryCount + 1 : 1
-    );
+    housesTraversed.set(currentHouseKey, (currentHousePresentCount ?? 0) + 1);
   }
 
   return housesTraversed.size;
@@ -67,12 +64,9 @@ export function getNumberOfHousesReceivingPresentFromSantaAndRoboSanta(
       currentHouseKey = JSON.stringify(roboSantaLocation);
     }
 
-    const currentHouseDeliveryCount = housesTraversed.get(currentHouseKey);
+    const currentHousePresentCount = housesTraversed.get(currentHouseKey);
 
-    housesTraversed.set(
-      currentHouseKey,
-      currentHouseDeliveryCount ? currentHouseDeliveryCount + 1 : 1
-    );
+    housesTraversed.set(currentHouseKey, (currentHousePresentCount ?? 0) + 1);
   }
 
   return housesTraversed.size;
