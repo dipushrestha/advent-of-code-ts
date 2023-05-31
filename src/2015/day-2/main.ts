@@ -1,8 +1,9 @@
-import fs from 'fs';
+import { readFileSync } from 'fs';
 
-const allPresentDimensions = fs
-  .readFileSync(`${__dirname}/input.txt`, 'utf-8')
-  .split('\n');
+const allPresentDimensions = readFileSync(
+  `${__dirname}/input.txt`,
+  'utf-8'
+).split('\n');
 
 function getDimensionsAsNumbers(
   dimensions: string

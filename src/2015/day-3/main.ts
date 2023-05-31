@@ -32,15 +32,11 @@ export function getNumberOfHousesReceivingPresentFromSanta(
   directions: string
 ): number {
   const santaLocation: Location = [0, 0];
-  const housesTraversed = new Map([[JSON.stringify(santaLocation), 1]]);
+  const housesTraversed = new Set([santaLocation.toString()]);
 
   for (let direction of directions) {
     moveLocation(santaLocation, direction as Direction);
-
-    const currentHouseKey = JSON.stringify(santaLocation);
-    const currentHousePresentCount = housesTraversed.get(currentHouseKey);
-
-    housesTraversed.set(currentHouseKey, (currentHousePresentCount ?? 0) + 1);
+    housesTraversed.add(santaLocation.toString());
   }
 
   return housesTraversed.size;
@@ -51,22 +47,16 @@ export function getNumberOfHousesReceivingPresentFromSantaAndRoboSanta(
 ): number {
   const santaLocation: Location = [0, 0];
   const roboSantaLocation: Location = [0, 0];
-  const housesTraversed = new Map([[JSON.stringify(santaLocation), 1]]);
+  const housesTraversed = new Set([santaLocation.toString()]);
 
   for (let i = 0; i < directions.length; i++) {
-    let currentHouseKey = '';
-
     if (i % 2 !== 0) {
       moveLocation(santaLocation, directions[i] as Direction);
-      currentHouseKey = JSON.stringify(santaLocation);
+      housesTraversed.add(santaLocation.toString());
     } else {
       moveLocation(roboSantaLocation, directions[i] as Direction);
-      currentHouseKey = JSON.stringify(roboSantaLocation);
+      housesTraversed.add(roboSantaLocation.toString());
     }
-
-    const currentHousePresentCount = housesTraversed.get(currentHouseKey);
-
-    housesTraversed.set(currentHouseKey, (currentHousePresentCount ?? 0) + 1);
   }
 
   return housesTraversed.size;

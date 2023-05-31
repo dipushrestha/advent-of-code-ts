@@ -6,8 +6,9 @@ export function findLowestNumberCreatingMD5HashWithLeadingZeros(
 ): number {
   let md5Hash = '';
   let keyNumber = 0;
+  const zeroes = '0'.repeat(zeroesCount);
 
-  while (!md5Hash.startsWith('0'.repeat(zeroesCount))) {
+  while (!md5Hash.startsWith(zeroes)) {
     keyNumber += 1;
     md5Hash = createHash('md5')
       .update(secretKey + keyNumber)
