@@ -49,14 +49,18 @@ export function getNumberOfHousesReceivingPresentFromSantaAndRoboSanta(
   const roboSantaLocation: Location = [0, 0];
   const housesTraversed = new Set([santaLocation.toString()]);
 
-  for (let i = 0; i < directions.length; i++) {
-    if (i % 2 !== 0) {
-      moveLocation(santaLocation, directions[i] as Direction);
+  let isSantaTurn = true;
+
+  for (let direction of directions) {
+    if (isSantaTurn) {
+      moveLocation(santaLocation, direction as Direction);
       housesTraversed.add(santaLocation.toString());
     } else {
-      moveLocation(roboSantaLocation, directions[i] as Direction);
+      moveLocation(roboSantaLocation, direction as Direction);
       housesTraversed.add(roboSantaLocation.toString());
     }
+
+    isSantaTurn = !isSantaTurn;
   }
 
   return housesTraversed.size;
