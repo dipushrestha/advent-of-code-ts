@@ -89,7 +89,20 @@ export function getWireSignalOfCircuit(
   }
 }
 
+const aWireSignal = getWireSignalOfCircuit(circuits, 'a');
+
+const newCircuits = circuits.map((circuit) =>
+  circuit.split(' -> ')[1] === 'b' ? `${aWireSignal} -> b` : circuit
+);
+
+const aWireNewSignal = getWireSignalOfCircuit(newCircuits, 'a');
+
 console.log(
   'Day 7 -> Part 1 -> Answer(Final signal provided to wire "a"):',
-  getWireSignalOfCircuit(circuits, 'a')
+  aWireSignal
+);
+
+console.log(
+  'Day 7 -> Part 2 -> Answer(Final new signal provided to wire "a"):',
+  aWireNewSignal
 );
