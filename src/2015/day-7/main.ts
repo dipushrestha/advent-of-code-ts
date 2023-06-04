@@ -5,9 +5,9 @@ const circuits = readFileSync(`${__dirname}/input.txt`, 'utf-8').split('\n');
 export function getWireSignalOfCircuit(
   circuits: string[],
   wire: string,
-  wireSignals = <Record<string, number>>{}
+  memoizedWireSignals = <Record<string, number>>{}
 ): number | undefined {
-  if (wireSignals[wire] !== undefined) return wireSignals[wire];
+  if (memoizedWireSignals[wire] !== undefined) return memoizedWireSignals[wire];
 
   const circuit = circuits.find((circuit) => circuit.split(' -> ')[1] === wire);
   if (!circuit) return;
@@ -22,11 +22,11 @@ export function getWireSignalOfCircuit(
     const intOperand = parseInt(operand);
 
     if (Number.isInteger(intOperand)) {
-      wireSignals[wire] = intOperand;
-      return wireSignals[wire];
+      memoizedWireSignals[wire] = intOperand;
+      return memoizedWireSignals[wire];
     }
 
-    return getWireSignalOfCircuit(circuits, operand, wireSignals);
+    return getWireSignalOfCircuit(circuits, operand, memoizedWireSignals);
   }
 
   if (exprSplit.length === 2) {
@@ -36,12 +36,12 @@ export function getWireSignalOfCircuit(
 
     const operandValue = Number.isInteger(intOperand)
       ? intOperand
-      : getWireSignalOfCircuit(circuits, operand, wireSignals);
+      : getWireSignalOfCircuit(circuits, operand, memoizedWireSignals);
     if (operandValue === undefined) return;
 
     // calculate BITWISE NOT
-    wireSignals[wire] = ~operandValue + MAX_16_BIT_U_INT + 1;
-    return wireSignals[wire];
+    memoizedWireSignals[wire] = ~operandValue + MAX_16_BIT_U_INT + 1;
+    return memoizedWireSignals[wire];
   }
 
   if (exprSplit.length === 3) {
@@ -54,11 +54,11 @@ export function getWireSignalOfCircuit(
 
     const operand1Value = Number.isInteger(intOperand1)
       ? intOperand1
-      : getWireSignalOfCircuit(circuits, operand1, wireSignals);
+      : getWireSignalOfCircuit(circuits, operand1, memoizedWireSignals);
 
     const operand2Value = Number.isInteger(intOperand2)
       ? intOperand2
-      : getWireSignalOfCircuit(circuits, operand2, wireSignals);
+      : getWireSignalOfCircuit(circuits, operand2, memoizedWireSignals);
 
     if (operand1Value === undefined || operand2Value === undefined) return;
 
@@ -83,8 +83,8 @@ export function getWireSignalOfCircuit(
     }
 
     if (result !== undefined) {
-      wireSignals[wire] = result;
-      return wireSignals[wire];
+      memoizedWireSignals[wire] = result;
+      return memoizedWireSignals[wire];
     }
   }
 }
@@ -103,6 +103,6 @@ console.log(
 );
 
 console.log(
-  'Day 7 -> Part 2 -> Answer(Final new signal provided to wire "a"):',
+  'Day 7 -> Part 2 -> Answer(New final signal provided to wire "a"):',
   aWireNewSignal
 );

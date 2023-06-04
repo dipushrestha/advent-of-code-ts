@@ -20,7 +20,9 @@ describe('Day 7: Some Assembly Required', () => {
     expect(getWireSignalOfCircuit(['1 -> p', 'p RSHIFT 2 -> q'], 'q')).toBe(0);
   });
 
-  test('NOT e -> f means that the bitwise complement of the value from wire e is provided to wire f', () => {});
+  test('NOT e -> f means that the bitwise complement of the value from wire e is provided to wire f', () => {
+    expect(getWireSignalOfCircuit(['123 -> x', 'NOT x -> h'], 'h')).toBe(65412);
+  });
 
   test('simple circuit', () => {
     const circuits = [
@@ -42,5 +44,16 @@ describe('Day 7: Some Assembly Required', () => {
     expect(getWireSignalOfCircuit(circuits, 'i')).toBe(65079);
     expect(getWireSignalOfCircuit(circuits, 'x')).toBe(123);
     expect(getWireSignalOfCircuit(circuits, 'y')).toBe(456);
+  });
+
+  test('NOT 1 -> x means that bitwise complement of the value of 1 is provided to wire x', () => {
+    expect(getWireSignalOfCircuit(['NOT 1 -> x'], 'x')).toBe(65534);
+  });
+
+  test('invalid circuit', () => {
+    expect(getWireSignalOfCircuit([''], 'x')).toBe(undefined);
+    expect(getWireSignalOfCircuit([' -> x'], 'x')).toBe(undefined);
+    expect(getWireSignalOfCircuit(['NOT x -> y'], 'y')).toBe(undefined);
+    expect(getWireSignalOfCircuit(['x AND y -> z'], 'z')).toBe(undefined);
   });
 });
