@@ -10,6 +10,33 @@ const routeDistanceTexts = readFileSync(
   'utf-8'
 ).split('\n');
 
+function parseRouteDistanceText(routeDistanceTexts: string[]): {
+  places: Set<string>;
+  routesDistances: RouteDistance[];
+} {
+  const places = new Set<string>();
+  const routesDistances: RouteDistance[] = [];
+
+  for (const routeDistanceText of routeDistanceTexts) {
+    const [route, distanceText] = routeDistanceText.split(' = ') as [
+      string,
+      string
+    ];
+    const distance = parseInt(distanceText);
+    const [source, destination] = route.split(' to ') as [string, string];
+
+    routesDistances.push({
+      route: new Set([source, destination]),
+      distance
+    });
+
+    places.add(source);
+    places.add(destination);
+  }
+
+  return { places, routesDistances };
+}
+
 function* possibleRoutes(places: Set<string>): Generator<string[]> {
   if (places.size === 2) {
     const [first, second] = [...places] as [string, string];
@@ -28,63 +55,52 @@ function* possibleRoutes(places: Set<string>): Generator<string[]> {
   }
 }
 
-function parseRouteDistanceText(routeDistanceTexts: string[]): {
-  places: Set<string>;
-  routesDistance: RouteDistance[];
-} {
-  const places = new Set<string>();
-  const routesDistance: RouteDistance[] = [];
+function* findRoutesDistances(
+  routes: string[][],
+  routesDistances: RouteDistance[]
+): Generator<number> {
+  for (const route of routes) {
+    let combinedRoutesDistance = 0;
+    let prevPlace = '';
 
-  for (const routeDistanceText of routeDistanceTexts) {
-    const [route, distanceText] = routeDistanceText.split(' = ') as [
-      string,
-      string
-    ];
-    const distance = parseInt(distanceText);
-    const [source, destination] = route.split(' to ') as [string, string];
+    for (const place of route) {
+      const routeDistance = routesDistances.find(
+        (r) => r.route.has(prevPlace) && r.route.has(place)
+      );
+      combinedRoutesDistance += routeDistance?.distance ?? 0;
+      prevPlace = place;
+    }
 
-    routesDistance.push({
-      route: new Set([source, destination]),
-      distance
-    });
-
-    places.add(source);
-    places.add(destination);
+    yield combinedRoutesDistance;
   }
-
-  return { places, routesDistance };
 }
 
 export function findShortestRouteDistance(
   routeDistanceTexts: string[]
 ): number {
-  const { places, routesDistance } = parseRouteDistanceText(routeDistanceTexts);
-  let shortestRouteDistance = 0;
+  const { places, routesDistances } =
+    parseRouteDistanceText(routeDistanceTexts);
 
-  for (const route of possibleRoutes(places)) {
-    let currentRouteDistance = 0;
-    let prevPlace = '';
+  const routes = [...possibleRoutes(places)];
 
-    for (const place of route) {
-      const routeDistance = routesDistance.find(
-        (r) => r.route.has(prevPlace) && r.route.has(place)
-      );
-      currentRouteDistance += routeDistance?.distance ?? 0;
-      prevPlace = place;
-    }
+  return Math.min(...findRoutesDistances(routes, routesDistances));
+}
 
-    if (
-      shortestRouteDistance === 0 ||
-      currentRouteDistance < shortestRouteDistance
-    ) {
-      shortestRouteDistance = currentRouteDistance;
-    }
-  }
+export function findLongestRouteDistance(routeDistanceTexts: string[]): number {
+  const { places, routesDistances } =
+    parseRouteDistanceText(routeDistanceTexts);
 
-  return shortestRouteDistance;
+  const routes = [...possibleRoutes(places)];
+
+  return Math.max(...findRoutesDistances(routes, routesDistances));
 }
 
 console.log(
   'Day 9 -> Part 1 -> Answer(Distance of shortest route):',
   findShortestRouteDistance(routeDistanceTexts)
+);
+
+console.log(
+  'Day 9 -> Part 1 -> Answer(Distance of longest route):',
+  findLongestRouteDistance(routeDistanceTexts)
 );

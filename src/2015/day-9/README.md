@@ -26,3 +26,17 @@ Belfast -> London -> Dublin = 982
 The shortest of these is `London -> Dublin -> Belfast = 605`, and so the answer is `605` in this example.
 
 What is the distance of the shortest route?
+
+### --- Part Two ---
+
+The next year, just to show off, Santa decides to take the route with the **longest distance** instead.
+
+He can still start and end at any two (different) locations he wants, and he still must visit each location exactly once.
+
+For example, given the distances above, the longest route would be 982 via (for example) `Dublin -> London -> Belfast`.
+
+What is the distance of the longest route?
+
+---
+
+From: [Day 9 - Advent of Code 2015](https://adventofcode.com/2015/day/9)
