@@ -1,5 +1,6 @@
 const puzzleInput = '1113122113';
-const applyTimes = 40;
+const part1ApplyTimes = 40;
+const part2ApplyTimes = 50;
 
 function nextLookAndSayTerm(input: string): string {
   const digits = input.split('');
@@ -30,6 +31,11 @@ export function lookAndSaySequence(startInput: string, n: number): string {
 }
 
 console.log(
-  'Day 10 -> Part 1 -> Answer(Length of the sequence):',
-  lookAndSaySequence(puzzleInput, applyTimes).length
+  `Day 10 -> Part 1 -> Answer(Length of result for input(${puzzleInput}) processed ${part1ApplyTimes}):`,
+  lookAndSaySequence(puzzleInput, part1ApplyTimes).length
+);
+
+console.log(
+  `Day 10 -> Part 2 -> Answer(Length of result for input(${puzzleInput}) processed ${part2ApplyTimes}):`,
+  lookAndSaySequence(puzzleInput, part2ApplyTimes).length
 );

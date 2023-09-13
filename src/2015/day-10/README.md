@@ -14,3 +14,13 @@ For example:
 
 Starting with the digits in your puzzle input, apply this process 40 times.  
 What is **the length of the result**?
+
+### --- Part Two ---
+
+Neat, right? You might also enjoy hearing [John Conway talking about this sequence](https://www.youtube.com/watch?v=ea7lJkEhytA) (that's **Conway of Conway's Game of Life** fame).
+
+Now, starting again with the digits in your puzzle input, apply this process **50** times. What is the **length of the new result**?
+
+---
+
+From: [Day 10 - Advent of Code 2015](https://adventofcode.com/2015/day/10)
