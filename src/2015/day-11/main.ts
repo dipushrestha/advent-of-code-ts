@@ -37,14 +37,10 @@ function incrementPassword(password: string): string {
 }
 
 export function nextPassword(password: string): string {
-  const MaxCounter = 99999999;
-  let counter = 1;
   let newPassword = password;
 
   while (true) {
     newPassword = incrementPassword(newPassword);
-
-    if (counter++ > MaxCounter) throw new Error('Counter exceeded');
 
     if (
       hasNoIOL(newPassword) &&
