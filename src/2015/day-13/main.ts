@@ -94,3 +94,27 @@ console.log(
   'Day 13 -> Part 1 -> Answer(Optimal total change in happiness):',
   optimalTotalChangeInHappiness(guestsHappinessTexts)
 );
+
+console.log(
+  'Day 13 -> Part 2 -> Answer(Optimal total change in happiness):',
+  optimalTotalChangeInHappiness(
+    guestsHappinessTexts.concat([
+      'Me would gain 0 happiness units by sitting next to Alice.',
+      'Me would gain 0 happiness units by sitting next to Bob.',
+      'Me would gain 0 happiness units by sitting next to Carol.',
+      'Me would gain 0 happiness units by sitting next to David.',
+      'Me would gain 0 happiness units by sitting next to Eric.',
+      'Me would gain 0 happiness units by sitting next to Frank.',
+      'Me would gain 0 happiness units by sitting next to George.',
+      'Me would gain 0 happiness units by sitting next to Mallory.',
+      'Alice would gain 0 happiness units by sitting next to Me.',
+      'Bob would gain 0 happiness units by sitting next to Me.',
+      'Carol would gain 0 happiness units by sitting next to Me.',
+      'David would gain 0 happiness units by sitting next to Me.',
+      'Eric would gain 0 happiness units by sitting next to Me.',
+      'Frank would gain 0 happiness units by sitting next to Me.',
+      'George would gain 0 happiness units by sitting next to Me.',
+      'Mallory would gain 0 happiness units by sitting next to Me.'
+    ])
+  )
+);
