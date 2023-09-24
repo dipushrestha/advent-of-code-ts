@@ -71,11 +71,14 @@ export function optimalTotalChangeInHappiness(guestsHappinessTexts: string[]) {
       (acc, guest, i) => {
         const prevNeighbor =
           seatingArrangement[i - 1] ?? seatingArrangement.at(-1)!;
+
         const nextNeighbor =
           seatingArrangement[i + 1] ?? seatingArrangement[0]!;
+
         const happiness =
           guestNeighborHappinessMap[guest]![nextNeighbor]! +
           guestNeighborHappinessMap[guest]![prevNeighbor]!;
+
         return acc + happiness;
       },
       0
