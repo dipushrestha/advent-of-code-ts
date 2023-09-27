@@ -65,7 +65,57 @@ export function findRaceWinner(
   return winnerStat;
 }
 
+export function findRacePointsWinner(
+  reindeerRaceStatTexts: string[],
+  raceDuration: number
+): {
+  winner: string;
+  points: number;
+} {
+  const raceStats = parseReindeerRaceStatText(reindeerRaceStatTexts);
+  const winner = { winner: '', points: 0 };
+  const leaderBoard: Record<string, { points: number; distance: number }> = {};
+
+  for (let currentSecond = 1; currentSecond <= raceDuration; currentSecond++) {
+    let leadingDistance = 0;
+
+    for (const { name, speed, moveDuration, restDuration } of raceStats) {
+      const cycleDuration = moveDuration + restDuration;
+      const cycleSecond = currentSecond % cycleDuration;
+      const isMoving = cycleSecond !== 0 && cycleSecond <= moveDuration;
+
+      leaderBoard[name] = {
+        points: leaderBoard[name]?.points || 0,
+        distance: (leaderBoard[name]?.distance || 0) + (isMoving ? speed : 0)
+      };
+
+      if (leaderBoard[name]!.distance > leadingDistance) {
+        leadingDistance = leaderBoard[name]!.distance;
+      }
+    }
+
+    for (const key of Object.keys(leaderBoard)) {
+      if (leaderBoard[key]!.distance !== leadingDistance) continue;
+      leaderBoard[key]!.points++;
+    }
+  }
+
+  for (const key of Object.keys(leaderBoard)) {
+    if (leaderBoard[key]!.points > winner.points) {
+      winner.winner = key;
+      winner.points = leaderBoard[key]!.points;
+    }
+  }
+
+  return winner;
+}
+
 console.log(
-  'Day 14 -> Part 1 -> Answer(Total distance traveled by winner):',
+  'Day 14 -> Part 1 -> Answer(Total distance traveled by the winner):',
   findRaceWinner(reindeerRaceStatTexts, 2503).distance
+);
+
+console.log(
+  'Day 14 -> Part 2 -> Answer(Total points of the winner):',
+  findRacePointsWinner(reindeerRaceStatTexts, 2503).points
 );
