@@ -12,7 +12,7 @@
     "check": "deno check src/**/*.ts scripts/**/*.ts",
     "test": "deno test --allow-read",
     "test:watch": "deno test --allow-read --watch",
-    "scaffold": "deno run --allow-read --allow-write --allow-env --allow-net scripts/scaffold_day.ts"
+    "scaffold": "sh -c 'if [ -f .env.local ]; then deno run --env-file=.env.local --allow-read --allow-write --allow-env --allow-net scripts/scaffold_day.ts \"$@\"; else deno run --allow-read --allow-write --allow-env --allow-net scripts/scaffold_day.ts \"$@\"; fi' --"
   },
   "imports": {
     "@std/assert": "jsr:@std/assert@^1.0.15"

@@ -24,7 +24,8 @@ Each day lives under `src/<year>/day-XX` and contains:
 
 ## Optional Input Auto-Fetch
 
-If `AOC_SESSION` is set in your environment, the scaffold command will try to
-download your personal puzzle input from Advent of Code and write it to
-`input.txt`. If the variable is missing (or fetch fails), it safely creates an
-empty `input.txt`.
+The scaffold task auto-loads `.env.local` when the file exists. If
+`AOC_SESSION` is available (from `.env.local` or your shell environment), it
+tries to download your personal puzzle input from Advent of Code and writes it
+to `input.txt`. If the variable is missing (or fetch fails), it safely creates
+an empty `input.txt`.
