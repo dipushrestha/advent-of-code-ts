@@ -1,3 +1,5 @@
+import TurndownService from 'npm:turndown';
+
 type ScaffoldOptions = {
   year: number;
   day: number;
@@ -68,6 +70,56 @@ async function maybeFetchPuzzleInput(
   return await response.text();
 }
 
+async function maybeFetchPuzzleReadme(
+  year: number,
+  day: number,
+  title: string
+): Promise<string | null> {
+  const session = Deno.env.get('AOC_SESSION');
+  const puzzleUrl = `https://adventofcode.com/${year}/day/${day}`;
+  const response = await fetch(puzzleUrl, {
+    headers: {
+      ...(session ? { Cookie: `session=${session}` } : {}),
+      'User-Agent': 'github.com/dipushrestha/advent-of-code-ts by local script'
+    }
+  });
+
+  if (!response.ok) {
+    console.warn(
+      `Unable to fetch puzzle page (${response.status}). Using README template instead.`
+    );
+    return null;
+  }
+
+  const html = await response.text();
+  const articleMatches = [
+    ...html.matchAll(/<article class="day-desc">([\s\S]*?)<\/article>/g)
+  ];
+  if (articleMatches.length === 0) return null;
+
+  const turndown = new TurndownService({
+    headingStyle: 'atx',
+    codeBlockStyle: 'fenced',
+    bulletListMarker: '-'
+  });
+  turndown.addRule('preserveLineBreaks', {
+    filter: ['br'],
+    replacement: () => '\n'
+  });
+
+  const sections = articleMatches
+    .map((match) => turndown.turndown(match[0]).trim())
+    .filter((section) => section.length > 0);
+  if (sections.length === 0) return null;
+
+  return `${sections.join('\n\n')}
+
+---
+
+From: [Day ${day} - Advent of Code ${year}](${puzzleUrl})
+`;
+}
+
 function solutionTemplate(): string {
   return `import { readFileSync } from 'node:fs';
 
@@ -132,9 +184,10 @@ async function run(): Promise<void> {
 
   await writeFileIfMissing(`${targetDir}/solution.ts`, solutionTemplate());
   await writeFileIfMissing(`${targetDir}/solution_test.ts`, testTemplate());
+  const fetchedReadme = await maybeFetchPuzzleReadme(year, day, puzzleTitle);
   await writeFileIfMissing(
     `${targetDir}/README.md`,
-    readmeTemplate(year, day, puzzleTitle)
+    fetchedReadme ?? readmeTemplate(year, day, puzzleTitle)
   );
 
   const fetchedInput = await maybeFetchPuzzleInput(year, day);

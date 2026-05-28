@@ -29,3 +29,8 @@ The scaffold task auto-loads `.env.local` when the file exists. If
 tries to download your personal puzzle input from Advent of Code and writes it
 to `input.txt`. If the variable is missing (or fetch fails), it safely creates
 an empty `input.txt`.
+
+The scaffold also tries to fetch the puzzle page and preserve Advent of Code
+formatting in `README.md` (headings/bold/code/lists). This works without
+`AOC_SESSION` for public content (typically Part 1), and may include Part 2
+when unlocked for your session.
