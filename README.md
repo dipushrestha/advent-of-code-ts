@@ -11,7 +11,7 @@ TypeScript Advent of Code solutions running on Deno.
 - Run tests: `deno task test`
 - Run tests in watch mode: `deno task test:watch`
 - Type check: `deno task check`
-- Scaffold a new day: `deno task scaffold <year> <day> [--title "Puzzle title"]`
+- Scaffold a new day: `deno task scaffold <year> <day> [--refresh-readme]`
 
 ## Day Structure
 
@@ -34,3 +34,6 @@ The scaffold also tries to fetch the puzzle page and preserve Advent of Code
 formatting in `README.md` (headings/bold/code/lists). This works without
 `AOC_SESSION` for public content (typically Part 1), and may include Part 2
 when unlocked for your session.
+
+Use `--refresh-readme` to overwrite an existing day `README.md` (useful after
+unlocking Part 2).

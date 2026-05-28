@@ -3,18 +3,17 @@ import TurndownService from 'npm:turndown';
 type ScaffoldOptions = {
   year: number;
   day: number;
-  title?: string;
+  refreshReadme: boolean;
 };
 
 function parseArgs(args: string[]): ScaffoldOptions {
   const positional: string[] = [];
-  let title: string | undefined;
+  let refreshReadme = false;
 
   for (let i = 0; i < args.length; i++) {
     const arg = args[i]!;
-    if (arg === '--title' || arg === '-t') {
-      title = args[i + 1];
-      i++;
+    if (arg === '--refresh-readme') {
+      refreshReadme = true;
       continue;
     }
 
@@ -26,7 +25,7 @@ function parseArgs(args: string[]): ScaffoldOptions {
 
   if (!Number.isInteger(year) || !Number.isInteger(day)) {
     throw new Error(
-      'Usage: deno task scaffold <year> <day> [--title "Day title"]'
+      'Usage: deno task scaffold <year> <day> [--refresh-readme]'
     );
   }
 
@@ -34,15 +33,15 @@ function parseArgs(args: string[]): ScaffoldOptions {
     throw new Error('Day must be between 1 and 25.');
   }
 
-  return { year, day, title };
+  return { year, day, refreshReadme };
 }
 
 function dayDirName(day: number): string {
   return `day-${day.toString().padStart(2, '0')}`;
 }
 
-function getDayTitle(day: number, title?: string): string {
-  return title?.trim() || `Day ${day}`;
+function getDayTitle(day: number): string {
+  return `Day ${day}`;
 }
 
 async function maybeFetchPuzzleInput(
@@ -72,8 +71,7 @@ async function maybeFetchPuzzleInput(
 
 async function maybeFetchPuzzleReadme(
   year: number,
-  day: number,
-  title: string
+  day: number
 ): Promise<string | null> {
   const session = Deno.env.get('AOC_SESSION');
   const puzzleUrl = `https://adventofcode.com/${year}/day/${day}`;
@@ -174,21 +172,28 @@ async function writeFileIfMissing(path: string, content: string): Promise<void> 
   }
 }
 
+async function writeFile(path: string, content: string): Promise<void> {
+  await Deno.writeTextFile(path, content);
+}
+
 async function run(): Promise<void> {
-  const { year, day, title } = parseArgs(Deno.args);
+  const { year, day, refreshReadme } = parseArgs(Deno.args);
   const dayFolder = dayDirName(day);
   const targetDir = `src/${year}/${dayFolder}`;
-  const puzzleTitle = getDayTitle(day, title);
+  const puzzleTitle = getDayTitle(day);
 
   await Deno.mkdir(targetDir, { recursive: true });
 
   await writeFileIfMissing(`${targetDir}/solution.ts`, solutionTemplate());
   await writeFileIfMissing(`${targetDir}/solution_test.ts`, testTemplate());
-  const fetchedReadme = await maybeFetchPuzzleReadme(year, day, puzzleTitle);
-  await writeFileIfMissing(
-    `${targetDir}/README.md`,
-    fetchedReadme ?? readmeTemplate(year, day, puzzleTitle)
-  );
+  const fetchedReadme = await maybeFetchPuzzleReadme(year, day);
+  const readmePath = `${targetDir}/README.md`;
+  const readmeContent = fetchedReadme ?? readmeTemplate(year, day, puzzleTitle);
+  if (refreshReadme) {
+    await writeFile(readmePath, readmeContent);
+  } else {
+    await writeFileIfMissing(readmePath, readmeContent);
+  }
 
   const fetchedInput = await maybeFetchPuzzleInput(year, day);
   await writeFileIfMissing(`${targetDir}/input.txt`, fetchedInput ?? '');
@@ -198,6 +203,9 @@ async function run(): Promise<void> {
     console.log('Created empty input.txt (set AOC_SESSION to auto-fetch input).');
   } else {
     console.log('Fetched puzzle input into input.txt.');
+  }
+  if (refreshReadme) {
+    console.log('Refreshed README.md.');
   }
 }
 
